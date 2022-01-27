@@ -28,7 +28,7 @@ async function run() {
     try {
         await client.connect();
         console.log('travel agency database connected successfully');
-        const database = client.db("mobile_bazar");
+        const database = client.db("travel_agency");
         const blogsCollection = database.collection("blogs");
         const commentsCollection = database.collection("comments");
         const reviewCollection = database.collection("review");
@@ -68,17 +68,38 @@ async function run() {
         })
 
 
-
-        // GET API Load all products
-        app.get('/products', async (req, res) => {
+        // GET All blog 
+        app.get('/blogs', async (req, res) => {
             const cursor = blogsCollection.find({});
-            const products = await cursor.toArray();
-            res.send(products);
+            const blogs = await cursor.toArray();
+            res.send(blogs);
+        })
+
+
+        // GET API Load  page filter blogs
+        app.get('/blogs', async (req, res) => {
+            const cursor = blogsCollection.find({});
+            console.log(req.query);
+            const page = req.query.page;
+            const size = parseInt(req.query.size);
+            let blogs;
+            const count = await cursor.count();
+            if (page) {
+                blogs = await cursor.skip(page * size).limit(size).toArray();
+            }
+            else {
+                blogs = await cursor.count();
+            }
+
+            res.send({
+                count,
+                blogs
+            });
         })
 
 
         // GET single Product API
-        app.get('/products/:id', async (req, res) => {
+        app.get('/blogs/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await blogsCollection.findOne(query);
@@ -88,7 +109,7 @@ async function run() {
 
 
         // DELETE Order  with user
-        app.delete('/products/:id', async (req, res) => {
+        app.delete('/blogs/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await blogsCollection.deleteOne(query);
