@@ -69,11 +69,11 @@ async function run() {
 
 
         // GET All blog 
-        app.get('/blogs', async (req, res) => {
-            const cursor = blogsCollection.find({});
-            const blogs = await cursor.toArray();
-            res.send(blogs);
-        })
+        // app.get('/blogs', async (req, res) => {
+        //     const cursor = blogsCollection.find({});
+        //     const blogs = await cursor.toArray();
+        //     res.send(blogs);
+        // })
 
 
         // GET API Load  page filter blogs
