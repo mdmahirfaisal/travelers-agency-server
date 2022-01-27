@@ -101,31 +101,35 @@ async function run() {
 
 
         // DELETE Order  with user
-        app.delete('/blogs/:id', async (req, res) => {
+        app.delete('/allBlogs/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await blogsCollection.deleteOne(query);
             res.send(result)
         })
 
+        // GET API Load all Blogs
+        app.get('/allBlogs', async (req, res) => {
+            const cursor = blogsCollection.find({});
+            const blogs = await cursor.toArray();
+            res.send(blogs);
+        })
 
         // POST API  products send to database
-        app.post('/products', async (req, res) => {
-            const products = req.body;
-            console.log(products);
-            const result = await blogsCollection.insertOne(products);
+        app.post('/blogs', async (req, res) => {
+            const blog = req.body;
+            const result = await blogsCollection.insertOne(blog);
             res.json(result);
         });
 
         // PUT API product update 
-
-        app.put('/updateProduct', (req, res) => {
-            const { id, name, price, description, img } = req.body;
+        app.put('/updateBlogs', (req, res) => {
+            const { id, time, location, expense, experience, img } = req.body;
             console.log(req.body);
             blogsCollection.findOneAndUpdate(
                 { _id: ObjectId(id) },
                 {
-                    $set: { name, price, description, img },
+                    $set: { time, location, expense, experience, img },
                 }
             ).then(result => res.send(result.lastErrorObject.updatedExisting))
         })
