@@ -125,7 +125,7 @@ async function run() {
         // PUT API product update 
         app.put('/updateBlogs', (req, res) => {
             const { id, time, location, expense, experience, img } = req.body;
-            console.log(req.body);
+            console.log("update api hitted");
             blogsCollection.findOneAndUpdate(
                 { _id: ObjectId(id) },
                 {
