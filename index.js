@@ -30,40 +30,40 @@ async function run() {
         console.log('travel agency database connected successfully');
         const database = client.db("travel_agency");
         const blogsCollection = database.collection("blogs");
-        const commentsCollection = database.collection("comments");
+        const userBlogsCollection = database.collection("userBlogs");
         const reviewCollection = database.collection("review");
         const usersCollection = database.collection("users");
 
 
         // GET API Load all orders
-        app.get('/orders', async (req, res) => {
-            const cursor = commentsCollection.find({});
+        app.get('/userBlogs', async (req, res) => {
+            const cursor = userBlogsCollection.find({});
             const orders = await cursor.toArray();
             res.send(orders);
         })
 
         // GET API orders by specific user
-        app.get('/ordersData', async (req, res) => {
+        app.get('/singleUserBlogs', async (req, res) => {
             const email = req.query.email;
             console.log(email);
             const query = { email: email };
-            const cursor = commentsCollection.find(query);
+            const cursor = userBlogsCollection.find(query);
             const result = await cursor.toArray();
             res.json(result)
         })
 
-        // POST API  orders send to database
-        app.post('/orders', async (req, res) => {
-            const orders = req.body;
-            const result = await commentsCollection.insertOne(orders);
+        // POST API  blogs send to database
+        app.post('/userBlogs', async (req, res) => {
+            const blogs = req.body;
+            const result = await userBlogsCollection.insertOne(blogs);
             res.json(result);
         });
 
-        // DELETE Order  with user
-        app.delete('/orders/:id', async (req, res) => {
+        // DELETE blogs with user
+        app.delete('/userBlogs/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
-            const result = await commentsCollection.deleteOne(query);
+            const result = await userBlogsCollection.deleteOne(query);
             res.send(result)
         })
 
@@ -197,7 +197,7 @@ async function run() {
         // PUT API status update 
         app.put('/updateOrderStatus', (req, res) => {
             const { id, status } = req.body;
-            commentsCollection.findOneAndUpdate(
+            userBlogsCollection.findOneAndUpdate(
                 { _id: ObjectId(id) },
                 {
                     $set: { status },
