@@ -115,7 +115,7 @@ async function run() {
             res.send(blogs);
         })
 
-        // POST API  products send to database
+        // POST API  Blogs send to database
         app.post('/blogs', async (req, res) => {
             const blog = req.body;
             const result = await blogsCollection.insertOne(blog);
@@ -132,9 +132,7 @@ async function run() {
                     $set: { time, location, expense, experience, img },
                 }
             ).then(result => res.send(result.lastErrorObject.updatedExisting))
-        })
-
-
+        });
 
         // POST API  review send to database
         app.post('/review', async (req, res) => {
@@ -194,16 +192,6 @@ async function run() {
             res.json(result);
         })
 
-        // PUT API status update 
-        app.put('/updateBlogStatus', (req, res) => {
-            const { id, status } = req.body;
-            userBlogsCollection.findOneAndUpdate(
-                { _id: ObjectId(id) },
-                {
-                    $set: { status },
-                }
-            ).then(result => res.send(result.lastErrorObject.updatedExisting))
-        })
 
     } finally {
         // await client.close();
