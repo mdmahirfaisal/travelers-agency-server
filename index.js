@@ -195,7 +195,7 @@ async function run() {
         })
 
         // PUT API status update 
-        app.put('/updateOrderStatus', (req, res) => {
+        app.put('/updateBlogStatus', (req, res) => {
             const { id, status } = req.body;
             userBlogsCollection.findOneAndUpdate(
                 { _id: ObjectId(id) },
